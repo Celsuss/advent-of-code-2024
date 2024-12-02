@@ -21,6 +21,14 @@ def partOne(left: list[int], right: list[int]):
     return dif
 
 
+def partTwo(left: list[int], right: list[int]):
+    """Solution for part two."""
+    score = 0
+    for l in left:
+        score += l * right.count(l)
+    return score
+
+
 def main():
     """Main function."""
     """ Part one """
@@ -31,9 +39,15 @@ def main():
     left, right = load_data('data/day-one.txt')
     res = partOne(left, right)
     print(f'Day one part one output is {res}')
-    """ Part two"""
 
-    return
+    """ Part two"""
+    left, right = load_data('data/day-one-test.txt')
+    res = partTwo(left, right)
+    assert res == 31
+
+    left, right = load_data('data/day-one.txt')
+    res = partTwo(left, right)
+    print(f'Day one part two output is {res}')
 
 
 if __name__ == '__main__':
