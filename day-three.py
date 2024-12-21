@@ -1,8 +1,31 @@
 """Day three advent of code."""
 
-def getMulValues(mem: str) -> list[(int, int)]:
+
+def setIsActive(mem: str, i: int, is_active: bool) -> bool:
+    """Set is_active depending on if do() or don't() is found in mem."""
+    kalle1 = mem[i:i+7]
+    kalle2 = mem[i:i+4]
+    if is_active is True and \
+       mem[i:i+7] == 'don\'t()':
+        return False
+    elif is_active is False and \
+         mem[i:i+4] == 'do()':
+        return True
+    return is_active
+
+
+def getMulValues(mem: str, do_dont_enable: bool = False) -> list[(int, int)]:
+    """Find all mul values in mem."""
     vals = []
+    is_active = True
     for i in range(len(mem)-3):
+        if do_dont_enable is True:
+            is_active = setIsActive(mem, i, is_active)
+
+        # Don't keep looking for mul when not active
+        if is_active is False:
+            continue
+
         if mem[i:i+4] != 'mul(':
             continue
         try:
@@ -49,7 +72,12 @@ def partTwo(mem: str) -> int:
     Only the most recent do() or don't() instruction applies. At the beginning
     of the program, mul instructions are enabled.
     """
-    return 0
+    prod_sum = 0
+    vals = getMulValues(mem, do_dont_enable=True)
+    for i in vals:
+        prod_sum += i[0] * i[1]
+
+    return prod_sum
 
 
 def getData(path: str) -> str:
@@ -72,16 +100,17 @@ def main():
     data = getData('data/day-three.txt')
     res = partOne(data)
     print(f'Day two part one solution: {res}')
-    assert res = 174561379
-
+    assert res == 174561379
 
     # Part two
-    data = getData('data/day-two-test.txt')
+    data = getData('data/day-three-test.txt')
     res = partTwo(data)
+    assert res == 48
 
-    data = getData('data/day-two.txt')
+    data = getData('data/day-three.txt')
     res = partTwo(data)
     print(f'Day two part two solution: {res}')
+    assert res == 106921067
     return
 
 
